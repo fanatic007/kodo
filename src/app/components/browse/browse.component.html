@@ -1,0 +1,36 @@
+<div class="loading" *ngIf="!dataReceived"><div class="loading__spinner"></div></div>
+<div *ngIf="dataReceived">
+  <div class="header">
+    <div>
+      <button *ngFor="let pageNumber of pages" (click)="changePage(pageNumber+1)">{{pageNumber + 1}}</button>
+    </div>    
+    <input class="header__search" type="text" placeholder="search" [ngModel]="searchQuery" #search [disabled]="!dataReceived">
+    <label for="sort">Sort By</label>
+    <select id="sort" class="header__search" [ngModel]="sortBy" #sort [disabled]="!dataReceived">
+      <option *ngFor="let option of sortOptions" [value]="option.value">{{option.label}}</option>
+    </select>
+  </div>    
+  <div class="grid">
+    <app-item-card *ngFor="let item of currentView" [name]="item.name" [thumbnail]="item.image" [description]="item.description"></app-item-card>
+  </div>
+  <hr>
+  <table>
+    <thead>
+      <th scope="column">Thumbnail</th>
+      <th scope="column">Name</th>
+      <th scope="column">Description</th>
+      <th scope="column">Date Last Edited</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of currentView">
+        <td><img [src]="item.image"></td> 
+        <td>{{item.name}}</td>
+        <td>{{item.description}}</td>
+        <td>{{item.dateLastEdited | date}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div> 
+    <button *ngFor="let pageNumber of pages" (click)="changePage(pageNumber+1)">{{pageNumber + 1}}</button>
+  </div>
+</div>
