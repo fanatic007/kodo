@@ -1,0 +1,32 @@
+.item-card{
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+  box-shadow: 0.5px 1px 2px lightgrey;
+  border: solid 1px lightgrey;
+  border-radius: 10px;
+  position: relative;
+  min-height: 95%;
+  &__thumbnail{
+    position: relative;
+    border: solid 1px black;
+    border-radius: 5px;
+    width: 250px;
+    height: 250px;
+    cursor: pointer;
+    margin: 10px 0px;
+  }
+  &__name{
+    font-family: 'Open Sans';
+    font-size: 1.2em;
+    color: darkgray;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  &__desriptipon{
+    font-family: 'Open Sans';
+    font-size: 0.6em;
+    color: darkgray;
+  }
+}
