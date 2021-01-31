@@ -18,18 +18,12 @@ export class DataService {
     return this.http.get(environment.browseEndPointUrl,{observe:'response',params:params});
   }
 
-
-  sortData(data, sortBy){
-    let stringComp = ( a,b) => { return a[sortBy] > b[sortBy] };
-    let dateComp = (a,b) => { return new Date(a[sortBy]) > new Date(b[sortBy]) };
-    let comparator;
-    if(sortBy==='dateLastEdited'){
-      comparator = dateComp;    
-    }
-    else{
-      comparator = stringComp;
-    }
-    return data.sort(comparator);
+  sortData(data:any[], sortBy){
+    let stringComp = (a,b) => { return a[sortBy].toLowerCase() > b[sortBy].toLowerCase()?1:-1;};
+    let dateComp = (a,b) => { return +new Date(a[sortBy]) - +new Date(b[sortBy]) };
+    let comparator = sortBy==='dateLastEdited'? dateComp: stringComp;
+    let result = data.sort(comparator);
+    return result;
   }
 
   getPage(data:any[],paginationConfig){
