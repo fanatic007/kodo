@@ -4,11 +4,11 @@
     <div class="header__inputs">
       <div class="text_box__wrapper">
         <div autofocus=true class="text_box__icon"><img src="/assets/icons/Search.svg"/></div>
-        <input autofocus=true class="text_box__input" type="text" placeholder="Search" [ngModel]="searchQuery" #search [disabled]="!dataReceived">
+        <input autofocus class="text_box__input" type="text" placeholder="Search" [ngModel]="searchQuery" #search [disabled]="!dataReceived">
       </div>
       <div class="select_box__wrapper"> 
         <label class="select_box__label" for="sort">Sort By</label>
-        <select class="select_box__select" id="sort" [ngModel]="sortBy" #sort [disabled]="!dataReceived">
+        <select class="select_box__select" id="sort" [ngModel]="sortBy" #sort [disabled]="!dataReceived || this.data.length==0">
           <option class="select_box__select__options" *ngFor="let option of sortOptions" [value]="option.value">{{option.label}}</option>
         </select>  
       </div>     
@@ -31,8 +31,11 @@
       </div>
     </div>
     <br>
-    <div class="table">
-      <table *ngIf="this.currentView.length > 0">
+    <div *ngIf="this.currentView.length === 0" class="table">
+      <h1>NO DATA</h1>
+    </div>
+    <div class="table" *ngIf="this.currentView.length > 0">
+      <table>
         <thead>
           <th scope="column"></th>
           <th scope="column">Name</th>

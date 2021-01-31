@@ -32,12 +32,15 @@ export class BrowseComponent implements  OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    //add query params if not present
     if(!this.router.url.includes("sortBy=")){
       this.queryParams['sortBy'] = this.sortBy;
     }
     if(!this.router.url.includes("page=")){
       this.queryParams['page'] = this.paginationConfig.pageNumber;
     }
+
+    //subscription to Activated Route to get changes in queryParams to trigger changes in the app
     this.searchParamObservable.subscribe((res)=>{
       this.paginationConfig.pageNumber =  res['page']? res['page']:this.paginationConfig.pageNumber;
       this.sortBy =  res['sortBy']? res['sortBy']:this.sortBy;
@@ -53,8 +56,7 @@ export class BrowseComponent implements  OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     /* Subsciption to an observable created from 'keyup' event of search box. Observed every with Debounce operator */
-    this.searchSubscription = fromEvent(this.search.nativeElement, 'keyup').pipe(debounceTime(500)).subscribe((event)=>{
-      console.log(<any>(<any>event).keyCode,this.search.nativeElement.value.trim().length);
+    this.searchSubscription = fromEvent(this.search.nativeElement, 'keyup').pipe(debounceTime(1500)).subscribe((event)=>{
       if(this.search.nativeElement.value.trim().length===0){
         this.searchQuery = "";
         this.fetchData(true);
@@ -68,7 +70,6 @@ export class BrowseComponent implements  OnInit, AfterViewInit, OnDestroy {
     this.sortSubscription = fromEvent(this.sort.nativeElement,'change').subscribe((event)=>{
       this.updateState({sortBy: (<any>(<any>event)).target.value });
     });
-    this.search.nativeElement.focus();
   }
 
   ngOnDestroy() {
@@ -88,19 +89,18 @@ export class BrowseComponent implements  OnInit, AfterViewInit, OnDestroy {
           this.dataReceived = true;
         },
         (err)=>{ console.log(err);
-          this.dataReceived = true; }
+          this.dataReceived = true;
+          alert('Error fetching data.'); }
       ); 
     }
     else{
       this.pages = Array.from(Array( Math.round(this.data.length/this.paginationConfig.pageSize) ).keys());
-      // this.updateState({sortBy:this.sortBy},'fetch');
       this.sortData();
     }
   }
   
   sortData(){
     this.data = this.dataService.sortData(this.data,this.sortBy);
-    // this.updateState({page:this.paginationConfig.pageNumber},'sort');
     this.getCurrentView();
   }
 
@@ -109,9 +109,11 @@ export class BrowseComponent implements  OnInit, AfterViewInit, OnDestroy {
   }
   
   getCurrentView(){
+    this.search.nativeElement.focus();
     this.currentView = this.dataService.getPage(this.data,this.paginationConfig);
   }
 
+  //changes app states by changing queryParams
   updateState(params: Partial<Params>) {
     this.router.navigate(['.'], {
       queryParams:params,

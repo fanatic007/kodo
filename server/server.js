@@ -26,14 +26,14 @@ function getData(file){
 
 app.get('/browse', (req, res) =>{
   let data = [];
-  data = getData('mock_data.json');
+  data = getData('mock_data.json'); //file that was given
   let queryParams = req.query;
   let searchQuery = queryParams.searchQuery?queryParams.searchQuery:undefined;
   if(searchQuery){
-    if(!(searchQuery.startsWith("\"") && searchQuery.endsWith("\""))){
-      searchQuery = searchQuery.substr(1, searchQuery.length - 2 ).replace(" ",".*");
+    if(!(searchQuery.startsWith("\"") && searchQuery.endsWith("\""))){       //checking for partial match condition
+      searchQuery = searchQuery.substr(1, searchQuery.length - 2 ).replace(" ",".*");      //replacing space by any character for partial match
     }
-    data = data.filter( item => new RegExp(searchQuery,'i').test(item.name) || new RegExp(searchQuery,'i').test(item.description) );
+    data = data.filter( item => new RegExp(searchQuery,'i').test(item.name) || new RegExp(searchQuery,'i').test(item.description) ); //filtering over two fields
   }
   res.send(data);
 })
@@ -41,4 +41,3 @@ app.get('/browse', (req, res) =>{
 function filterExact(item){
   new RegExp(searchQuery,'i').test(item.name);
 }
-//browse/:sortBy/:
