@@ -25,25 +25,19 @@
     </div>
     <br>
     <br>
-    <div class="pages">
-      <div class="pages__buttons">
-        <button *ngFor="let pageNumber of pages" [ngClass]="{'pages__buttons__selected': pageNumber+1 == paginationConfig.pageNumber }" (click)="changePage(pageNumber+1)">{{pageNumber + 1}}</button>
-      </div>
-    </div>
-    <br>
-    <div *ngIf="this.currentView.length === 0" class="table">
+    <div *ngIf="this.data.length === 0" class="table">
       <h1>NO DATA</h1>
     </div>
-    <div class="table" *ngIf="this.currentView.length > 0">
+    <div class="table" *ngIf="this.data.length > 0">
       <table>
         <thead>
           <th scope="column"></th>
           <th scope="column">Name</th>
           <th scope="column">Description</th>
-          <th scope="column">Date Last Edited</th>
+          <th scope="column">Date Edited</th>
         </thead>
         <tbody>
-          <tr *ngFor="let item of currentView">
+          <tr *ngFor="let item of data">
             <td><img [src]="item.image"></td> 
             <td>{{item.name}}</td>
             <td>{{item.description}}</td>
